@@ -29,12 +29,29 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>btime_tracker</title>
+  <title>BTime Tracker</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
     // The value below is injected by flutter build, do not touch.
     const serviceWorkerVersion = "401616102";
+  </script>
+  <script>
+    function receiveMessage(event) {
+      if (event.data && event.data.type === 'INITIAL_DATA') {
+        // Handle the received data
+        console.log('Received data from parent page:', event.data.payload);
+
+        // You can pass the data to your Flutter app here
+        window.flutter_inappwebview.callHandler('handleInitialData', event.data.payload);
+      }
+    }
+
+    function sendMessageToParent(data) {
+      window.parent.postMessage(data, '*');
+    }
+
+    window.addEventListener('message', receiveMessage, false);
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
